@@ -32,7 +32,7 @@ To put it simply:
 * **JDK** provides the tools required to write and compile the code into bytecode.
 
 
-```mermaid
+```
 
     JDK
 +-----------------------------------------------------------------+
