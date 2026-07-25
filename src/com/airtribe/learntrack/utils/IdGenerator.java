@@ -1,4 +1,4 @@
-package main.java.com.airtribe.learntrack.utils;
+package com.airtribe.learntrack.utils;
 
 public class IdGenerator {
 

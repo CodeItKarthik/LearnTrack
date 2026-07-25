@@ -1,16 +1,18 @@
-package main.java.com.airtribe.learntrack.entity;
+package com.airtribe.learntrack.entity;
 
-import java.util.Date;
+import com.airtribe.learntrack.enums.STATUSENUM;
+
+import java.time.LocalDate;
 
 public class Enrollment {
 
     private int id;
     private int studentId;
     private int courseId;
-    private Date enrollmentDate;
+    private LocalDate enrollmentDate;
     private STATUSENUM status;
 
-    public Enrollment(int id, int studentId, int courseId, Date enrollmentDate, STATUSENUM status) {
+    public Enrollment(int id, int studentId, int courseId, LocalDate enrollmentDate, STATUSENUM status) {
         this.id = id;
         this.studentId = studentId;
         this.courseId = courseId;
@@ -42,11 +44,11 @@ public class Enrollment {
         this.courseId = courseId;
     }
 
-    public Date getEnrollmentDate() {
+    public LocalDate getEnrollmentDate() {
         return enrollmentDate;
     }
 
-    public void setEnrollmentDate(Date enrollmentDate) {
+    public void setEnrollmentDate(LocalDate enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
     }
 

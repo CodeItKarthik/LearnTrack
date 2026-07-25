@@ -1,9 +1,5 @@
-package main.java.com.airtribe.learntrack.utils;
+package com.airtribe.learntrack.utils;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.time.format.ResolverStyle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +15,11 @@ public class InputValidator {
      * @return true if valid, false otherwise
      */
     public static boolean isNotBlank(String str) {
-        return str != null && !str.isBlank();
+        if (str == null || str.isBlank()) {
+            System.out.println("Please enter valid last name.");
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -40,16 +40,23 @@ public class InputValidator {
      * @param studentName Student name to validate
      * @return true if valid, false otherwise
      */
-    public static boolean isValidName(String studentName) {
+    public static boolean isValidFirstName(String studentName) {
         if (studentName == null || studentName.trim().isEmpty()) {
+            System.out.println("Please enter valid first name.");
             return false;
         }
 
         if (studentName.length() < 2 || studentName.length() > 50) {
+            System.out.println("Please enter valid first name.");
             return false;
         }
 
-        return NAME_PATTERN.matcher(studentName).matches();
+        if (!NAME_PATTERN.matcher(studentName).matches()) {
+            System.out.println("Please enter valid first name.");
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -59,10 +66,16 @@ public class InputValidator {
      */
     public static boolean isValidCourseName(String courseName) {
         if (courseName == null || courseName.trim().isEmpty()) {
+            System.out.println("Please enter valid course name.");
             return false;
         }
 
-        return courseName.length() >= 2 && courseName.length() <= 50;
+        if (courseName.length() < 2 || courseName.length() > 50) {
+            System.out.println("Please enter valid course name.");
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -71,7 +84,11 @@ public class InputValidator {
      * @return true if valid, false otherwise
      */
     public static boolean descriptionLengthCheck(String courseDesc) {
-        return courseDesc.length() <= 200;
+        if (courseDesc.length() <= 200) {
+            return true;
+        }
+        System.out.println("Course description should be within 200 characters.");
+        return false;
     }
 
     /**
@@ -80,7 +97,11 @@ public class InputValidator {
      * @return true if valid, false otherwise
      */
     public static boolean isValidDuration(int duration) {
-        return duration > 0 && duration <= 53;
+        if (duration > 0 && duration <= 53) {
+            return true;
+        }
+        System.out.println("Please enter valid course duration");
+        return false;
     }
 
 }
