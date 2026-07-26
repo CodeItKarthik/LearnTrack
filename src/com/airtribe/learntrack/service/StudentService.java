@@ -9,6 +9,8 @@ import com.airtribe.learntrack.utils.IdGenerator;
 
 import java.util.List;
 
+import static com.airtribe.learntrack.constants.AppConstants.*;
+
 public class StudentService {
 
     StudentRepository studentRepository = new StudentRepository();
@@ -16,9 +18,9 @@ public class StudentService {
     public void addStudent(String firstName, String lastName, String email) {
         int id = IdGenerator.getNextStudentId();
         String batch = BatchGenerator.generateBatchNumber();
-        Student student = new Student(id, firstName, lastName, email, batch, true);
+        Student student = new Student(id, firstName, lastName, email, batch, BOOL_TRUE);
         studentRepository.addStudent(student);
-        System.out.println("============================ Student added successfully ============================");
+        System.out.println(EQUALS + " Student added successfully " + EQUALS);
     }
 
     public void removeStudent(int id) {
@@ -35,24 +37,24 @@ public class StudentService {
             try {
                 if (studentToDelete != null) {
                     studentRepository.removeStudent(studentToDelete);
-                    System.out.println("============================ Student with id: " + id + " removed successfully ============================");
+                    System.out.println(EQUALS + " Student with id: " + id + " removed successfully " + EQUALS);
                 } else {
-                    throw new EntityNotFoundException("============================ Student with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Student with id " + id + " not found " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no students available ============================");
+            throw new EmptyDataException(EQUALS + " There are no students available " + EQUALS);
         }
     }
 
     public void listStudents() {
         List<Student> students = studentRepository.listStudents();
         if (students.isEmpty()) {
-            throw new EmptyDataException("============================ There are no students to display ============================");
+            throw new EmptyDataException(EQUALS + " There are no students to display " + EQUALS);
         } else {
-            System.out.println("============================ List of Students ============================");
+            System.out.println(EQUALS + " List of Students " + EQUALS);
             students.forEach(System.out::println);
         }
     }
@@ -77,17 +79,17 @@ public class StudentService {
 
             try {
                 if (studentToDeactivate == null) {
-                    throw new EntityNotFoundException("============================ Student with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Student with id " + id + " not found " + EQUALS);
                 } else {
-                    studentToDeactivate.setActive(false);
+                    studentToDeactivate.setActive(BOOL_FALSE);
                     studentRepository.updateStudent(indexToUpdate, studentToDeactivate);
-                    System.out.println("============================ Student with id: " + id + " deactivated successfully ============================");
+                    System.out.println(EQUALS + " Student with id: " + id + " deactivated successfully " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no students available ============================");
+            throw new EmptyDataException(EQUALS + " There are no students available " + EQUALS);
         }
     }
 
@@ -107,17 +109,17 @@ public class StudentService {
 
             try {
                 if (studentToActivate == null) {
-                    throw new EntityNotFoundException("============================ Student with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Student with id " + id + " not found " + EQUALS);
                 } else {
-                    studentToActivate.setActive(true);
+                    studentToActivate.setActive(BOOL_TRUE);
                     studentRepository.updateStudent(indexToUpdate, studentToActivate);
-                    System.out.println("============================ Student with id: " + id + " activated successfully ============================");
+                    System.out.println(EQUALS + " Student with id: " + id + " activated successfully " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no students available ============================");
+            throw new EmptyDataException(EQUALS + " There are no students available " + EQUALS);
         }
     }
 

@@ -1,12 +1,14 @@
 package com.airtribe.learntrack.utils;
 
+import com.airtribe.learntrack.constants.AppConstants;
+
 public class IdGenerator {
 
-    private static int studentIdCounter = 0;
+    private static int studentIdCounter = AppConstants.INITIAL_COUNT_VALUE;
 
-    private static int courseIdCounter = 0;
+    private static int courseIdCounter = AppConstants.INITIAL_COUNT_VALUE;
 
-    private static int enrollmentIdCounter = 0;
+    private static int enrollmentIdCounter = AppConstants.INITIAL_COUNT_VALUE;
 
     public static int getNextStudentId() {
         return ++studentIdCounter;

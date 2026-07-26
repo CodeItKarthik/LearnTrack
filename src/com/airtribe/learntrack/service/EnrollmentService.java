@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.airtribe.learntrack.constants.AppConstants.EQUALS;
+
 public class EnrollmentService {
 
     EnrollmentRepository enrollmentRepository = new EnrollmentRepository();
@@ -21,14 +23,14 @@ public class EnrollmentService {
         try {
             for (Enrollment enrollment : enrollments) {
                 if (studentId == enrollment.getStudentId() && courseId == enrollment.getCourseId()) {
-                    throw new DuplicateException("============================ This student with id " + studentId + " is already enrolled for this course " + courseId + " ============================");
+                    throw new DuplicateException(EQUALS + " This student with id " + studentId + " is already enrolled for this course " + courseId + " " + EQUALS);
                 }
             }
 
             int id = IdGenerator.getNextEnrollmentId();
             Enrollment enrollment = new Enrollment(id, studentId, courseId, enrollmentDate, STATUSENUM.ACTIVE);
             enrollmentRepository.addEnrollment(enrollment);
-            System.out.println("============================ Enrollment completed successfully ============================");
+            System.out.println(EQUALS + " Enrollment completed successfully " + EQUALS);
         } catch (DuplicateException e) {
             System.out.println(e);
         }
@@ -49,24 +51,24 @@ public class EnrollmentService {
             try {
                 if (enrollmentToDelete != null) {
                     enrollmentRepository.removeEnrollment(enrollmentToDelete);
-                    System.out.println("============================ Enrollment with id: " + id + " removed successfully ============================");
+                    System.out.println(EQUALS + " Enrollment with id: " + id + " removed successfully " + EQUALS);
                 } else {
-                    throw new EntityNotFoundException("============================ Enrollment with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Enrollment with id " + id + " not found " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no enrollments available ============================");
+            throw new EmptyDataException(EQUALS + " There are no enrollments available " + EQUALS);
         }
     }
 
     public void listEnrollments() {
         List<Enrollment> enrollments = enrollmentRepository.listEnrollments();
         if (enrollments.isEmpty()) {
-            throw new EmptyDataException("============================ There are no enrollments to display ============================");
+            throw new EmptyDataException(EQUALS + " There are no enrollments to display " + EQUALS);
         } else {
-            System.out.println("============================ List of Enrollments ============================");
+            System.out.println(EQUALS + " List of Enrollments " + EQUALS);
             enrollments.forEach(System.out::println);
         }
     }
@@ -83,43 +85,21 @@ public class EnrollmentService {
 
             try {
                 if (studentEnrollments.isEmpty()) {
-                    throw new EntityNotFoundException("============================ This student " + id + " is not enrolled in any courses ============================");
+                    throw new EntityNotFoundException(EQUALS + " This student " + id + " is not enrolled in any courses " + EQUALS);
                 } else {
-                    System.out.println("====================== List of enrollments for student with id: " + id + " ======================");
+                    System.out.println(EQUALS + " List of enrollments for student with id: " + id + " " + EQUALS);
                     studentEnrollments.forEach(System.out::println);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no enrollments available ============================");
+            throw new EmptyDataException(EQUALS + " There are no enrollments available " + EQUALS);
         }
     }
 
-    public void searchEnrollmentById(int id) {
-        Enrollment enrollmentSearched = null;
-        List<Enrollment> enrollments = enrollmentRepository.listEnrollments();
-        if (!enrollments.isEmpty()) {
-            for (Enrollment enrollment : enrollments) {
-                if (enrollment.getId() == id) {
-                    enrollmentSearched = enrollment;
-                    break;
-                }
-            }
-
-            try {
-                if (enrollmentSearched == null) {
-                    throw new EntityNotFoundException("============================ Enrollment with id " + id + " not found ============================");
-                } else {
-                    System.out.println("====================== Enrollment details for id: " + id + " ======================");
-                    System.out.println(enrollmentSearched);
-                }
-            } catch (EntityNotFoundException e) {
-                System.out.println(e);
-            }
-        } else {
-            throw new EmptyDataException("============================ There are no enrollments available ============================");
-        }
+    public Enrollment searchEnrollmentById(int id) {
+        return enrollmentRepository.searchEnrollmentById(id);
     }
 
     public void cancelEnrollment(int id) {
@@ -138,17 +118,17 @@ public class EnrollmentService {
 
             try {
                 if (enrollmentToCancel == null) {
-                    throw new EntityNotFoundException("============================ Enrollment with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Enrollment with id " + id + " not found " + EQUALS);
                 } else {
                     enrollmentToCancel.setStatus(STATUSENUM.CANCELLED);
                     enrollmentRepository.updateEnrollment(indexToUpdate, enrollmentToCancel);
-                    System.out.println("============================ Enrollment with id " + id + " marked as cancelled ============================");
+                    System.out.println(EQUALS + " Enrollment with id " + id + " marked as cancelled " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no enrollments available ============================");
+            throw new EmptyDataException(EQUALS + " There are no enrollments available " + EQUALS);
         }
     }
 
@@ -168,17 +148,17 @@ public class EnrollmentService {
 
             try {
                 if (enrollmentToComplete == null) {
-                    throw new EntityNotFoundException("============================ Enrollment with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Enrollment with id " + id + " not found " + EQUALS);
                 } else {
                     enrollmentToComplete.setStatus(STATUSENUM.COMPLETED);
                     enrollmentRepository.updateEnrollment(indexToUpdate, enrollmentToComplete);
-                    System.out.println("============================ Enrollment with id " + id + " marked as completed ============================");
+                    System.out.println(EQUALS + " Enrollment with id " + id + " marked as completed " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no enrollments available ============================");
+            throw new EmptyDataException(EQUALS + " There are no enrollments available " + EQUALS);
         }
     }
 

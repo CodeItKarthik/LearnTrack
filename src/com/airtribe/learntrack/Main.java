@@ -1,7 +1,7 @@
 package com.airtribe.learntrack;
 
-import com.airtribe.learntrack.constants.MenuOptions;
 import com.airtribe.learntrack.entity.Course;
+import com.airtribe.learntrack.entity.Enrollment;
 import com.airtribe.learntrack.entity.Student;
 import com.airtribe.learntrack.exceptions.*;
 import com.airtribe.learntrack.service.CourseService;
@@ -19,6 +19,9 @@ import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import static com.airtribe.learntrack.constants.AppConstants.*;
+import static com.airtribe.learntrack.constants.MenuOptions.*;
 
 public class Main {
 
@@ -59,14 +62,14 @@ public class Main {
     }
 
     private static void displayMainMenu() {
-        System.out.println("\n=================================");
-        System.out.println("        MAIN CONSOLE MENU        ");
-        System.out.println("=================================");
-        System.out.println(MenuOptions.STUDENT_MANAGEMENT_MENU);
-        System.out.println(MenuOptions.COURSE_MANAGEMENT_MENU);
-        System.out.println(MenuOptions.ENROLLMENT_MANAGEMENT_MENU);
-        System.out.println(MenuOptions.EXIT_APPLICATION);
-        System.out.print("Please enter your choice (1-4): ");
+        System.out.println(EQUALS);
+        System.out.println(MAIN_MENU);
+        System.out.println(EQUALS);
+        System.out.println(STUDENT_MANAGEMENT_MENU);
+        System.out.println(COURSE_MANAGEMENT_MENU);
+        System.out.println(ENROLLMENT_MANAGEMENT_MENU);
+        System.out.println(EXIT_APPLICATION);
+        System.out.print(ENTER_CHOICE + " (1-4): ");
     }
 
     private static void executeMainAction(int choice, Scanner scanner) {
@@ -82,10 +85,10 @@ public class Main {
                 handleEnrollmentManagementSubMenu(scanner);
                 break;
             case 4:
-                System.out.println("Thank you for using the system. Goodbye!");
+                System.out.println(THANKYOU_GOODBYE);
                 break;
             default:
-                System.out.println("Error: Invalid entry. Please enter a number between 1 and 4.");
+                System.out.println(INVALID_ENTRY + "1 and 4.");
                 break;
         }
     }
@@ -95,15 +98,15 @@ public class Main {
 
         // Sub-menu loop continues until user inputs the 'Go Back' option (3)
         do {
-            System.out.println("\n--- STUDENT MANAGEMENT SUB-MENU ---");
-            System.out.println(MenuOptions.ADD_NEW_STUDENT);
-            System.out.println(MenuOptions.VIEW_ALL_STUDENTS);
-            System.out.println(MenuOptions.SEARCH_STUDENT_BY_ID);
-            System.out.println(MenuOptions.REMOVE_STUDENT_BY_ID);
-            System.out.println(MenuOptions.DEACTIVATE_STUDENT_BY_ID);
-            System.out.println(MenuOptions.ACTIVATE_STUDENT_BY_ID);
-            System.out.println("7. " + MenuOptions.GO_BACK_TO_MAIN_MENU);
-            System.out.print("Please enter your sub-choice (1-7): ");
+            System.out.println("\n" + DASHES + STUDENT_MANAG_SUBMENU + DASHES);
+            System.out.println(ADD_NEW_STUDENT);
+            System.out.println(VIEW_ALL_STUDENTS);
+            System.out.println(SEARCH_STUDENT_BY_ID);
+            System.out.println(REMOVE_STUDENT_BY_ID);
+            System.out.println(DEACTIVATE_STUDENT_BY_ID);
+            System.out.println(ACTIVATE_STUDENT_BY_ID);
+            System.out.println("7. " + GO_BACK_TO_MAIN_MENU);
+            System.out.print(ENTER_CHOICE + " (1-7): ");
 
             subChoice = getUserChoice(scanner);
             System.out.println();
@@ -153,19 +156,19 @@ public class Main {
                     }
                     break;
                 case 7:
-                    System.out.println("Returning to Main Menu...");
+                    System.out.println(RETURNING_MAIN_MENU);
                     break;
                 default:
-                    System.out.println("Error: Invalid sub-entry. Enter a number between 1 and 7.");
+                    System.out.println(INVALID_ENTRY + "1 and 7.");
                     break;
             }
         } while (subChoice != 7);
     }
 
     private static void createStudentProfile(Scanner scanner) {
-        System.out.println("--------------------- ENTER STUDENT DETAILS -------------------------");
-        System.out.println("(Type 'cancel' to return to menu, or 'exit' to quit the app entirely)");
-        System.out.println("---------------------------------------------------------------------");
+        System.out.println(DASHES + ENTER_STUDENT_DETAILS + DASHES);
+        System.out.println(SUB_MENU_CANCEL_EXIT_OPTION);
+        System.out.println(DASHES + DASHES + DASHES);
 
         String firstName = null;
         do {
@@ -188,7 +191,7 @@ public class Main {
             if (InputValidator.isValidEmail(email)) {
                 break; // Valid layout, exit validation loop
             }
-            System.out.println("============================ Invalid email format. Try again (e.g., name@domain.com) ============================");
+            System.out.println(EQUALS + " Invalid email format. Try again (e.g., name@domain.com) " + EQUALS);
         }
         studentService.addStudent(firstName, lastName, email);
     }
@@ -208,13 +211,13 @@ public class Main {
             Student studentSearched = studentService.searchStudentById(studentId);
 
             if (studentSearched == null) {
-                throw new EntityNotFoundException("============================ Student with id " + studentId + " not found ============================");
+                throw new EntityNotFoundException(EQUALS + " Student with id " + studentId + " not found " + EQUALS);
             } else {
-                System.out.println("====================== Details of Student with id: " + studentId + "======================");
+                System.out.println(EQUALS + " Details of Student with id: " + studentId + " " + EQUALS);
                 System.out.println(studentSearched);
             }
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EntityNotFoundException e) {
             System.out.println(e);
         }
@@ -226,7 +229,7 @@ public class Main {
             int studentId = Integer.parseInt(readSafeInput(scanner));
             studentService.removeStudent(studentId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -238,7 +241,7 @@ public class Main {
             int studentId = Integer.parseInt(readSafeInput(scanner));
             studentService.deactivateStudent(studentId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -250,7 +253,7 @@ public class Main {
             int studentId = Integer.parseInt(readSafeInput(scanner));
             studentService.activateStudent(studentId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -261,16 +264,16 @@ public class Main {
 
         // Sub-menu loop continues until user inputs the 'Go Back' option (3)
         do {
-            System.out.println("\n--- COURSE MANAGEMENT SUB-MENU ---");
-            System.out.println(MenuOptions.ADD_NEW_COURSE);
-            System.out.println(MenuOptions.VIEW_ALL_COURSES);
-            System.out.println(MenuOptions.SEARCH_COURSE_BY_ID);
-            System.out.println(MenuOptions.REMOVE_COURSE_BY_ID);
-            System.out.println(MenuOptions.REMOVE_COURSE_BY_NAME);
-            System.out.println(MenuOptions.DEACTIVATE_COURSE_BY_ID);
-            System.out.println(MenuOptions.ACTIVATE_COURSE_BY_ID);
-            System.out.println("8. " + MenuOptions.GO_BACK_TO_MAIN_MENU);
-            System.out.print("Please enter your sub-choice (1-8): ");
+            System.out.println("\n" + DASHES + COURSE_MANAG_SUBMENU + DASHES);
+            System.out.println(ADD_NEW_COURSE);
+            System.out.println(VIEW_ALL_COURSES);
+            System.out.println(SEARCH_COURSE_BY_ID);
+            System.out.println(REMOVE_COURSE_BY_ID);
+            System.out.println(REMOVE_COURSE_BY_NAME);
+            System.out.println(DEACTIVATE_COURSE_BY_ID);
+            System.out.println(ACTIVATE_COURSE_BY_ID);
+            System.out.println("8. " + GO_BACK_TO_MAIN_MENU);
+            System.out.print(ENTER_CHOICE + " (1-8): ");
 
             subChoice = getUserChoice(scanner);
             System.out.println();
@@ -328,10 +331,10 @@ public class Main {
                     }
                     break;
                 case 8:
-                    System.out.println("Returning to Main Menu...");
+                    System.out.println(RETURNING_MAIN_MENU);
                     break;
                 default:
-                    System.out.println("Error: Invalid sub-entry. Enter a number between 1 and 7.");
+                    System.out.println(INVALID_ENTRY + "1 and 7.");
                     break;
             }
         } while (subChoice != 8);
@@ -339,9 +342,9 @@ public class Main {
 
     private static void createCourse(Scanner scanner) {
         try {
-            System.out.println("---------------------- ENTER COURSE DETAILS -------------------------");
-            System.out.println("(Type 'cancel' to return to menu, or 'exit' to quit the app entirely)");
-            System.out.println("---------------------------------------------------------------------");
+            System.out.println(DASHES + ENTER_COURSE_DETAILS + DASHES);
+            System.out.println(SUB_MENU_CANCEL_EXIT_OPTION);
+            System.out.println(DASHES+DASHES+DASHES);
 
             String courseName = null;
             do {
@@ -363,7 +366,7 @@ public class Main {
 
             courseService.addCourse(courseName, courseDesc, duration);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         }
     }
 
@@ -382,13 +385,13 @@ public class Main {
             Course courseSearched = courseService.searchCourseById(courseId);
 
             if (courseSearched == null) {
-                throw new EntityNotFoundException("============================ Course with id " + courseId + " not found ============================");
+                throw new EntityNotFoundException(EQUALS + " Course with id " + courseId + " not found " + EQUALS);
             } else {
-                System.out.println("====================== Details of Course with id: " + courseId + "======================");
+                System.out.println(EQUALS + " Details of Course with id: " + courseId + " " + EQUALS);
                 System.out.println(courseSearched);
             }
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EntityNotFoundException e) {
             System.out.println(e);
         }
@@ -400,7 +403,7 @@ public class Main {
             int courseId = Integer.parseInt(readSafeInput(scanner));
             courseService.removeCourse(courseId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -412,7 +415,7 @@ public class Main {
             String courseName = readSafeInput(scanner);
             courseService.removeCourse(courseName);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -424,7 +427,7 @@ public class Main {
             int courseId = Integer.parseInt(readSafeInput(scanner));
             courseService.deactivateCourse(courseId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -436,7 +439,7 @@ public class Main {
             int courseId = Integer.parseInt(readSafeInput(scanner));
             courseService.activateCourse(courseId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -447,16 +450,16 @@ public class Main {
 
         // Sub-menu loop continues until user inputs the 'Go Back' option (3)
         do {
-            System.out.println("\n--- ENROLLMENT MANAGEMENT SUB-MENU ---");
-            System.out.println(MenuOptions.ADD_NEW_ENROLLMENT);
-            System.out.println(MenuOptions.VIEW_ALL_ENROLLMENTS);
-            System.out.println(MenuOptions.SEARCH_ENROLLMENT_BY_ID);
-            System.out.println(MenuOptions.REMOVE_ENROLLMENT_BY_ID);
-            System.out.println(MenuOptions.LIST_ENROLLMENTS_BY_STUDENT_ID);
-            System.out.println(MenuOptions.CANCEL_ENROLLMENT_BY_ID);
-            System.out.println(MenuOptions.COMPLETE_ENROLLMENT_BY_ID);
-            System.out.println("8. " + MenuOptions.GO_BACK_TO_MAIN_MENU);
-            System.out.print("Please enter your sub-choice (1-8): ");
+            System.out.println("\n" + DASHES + ENROLL_MANAG_SUBMENU + DASHES);
+            System.out.println(ADD_NEW_ENROLLMENT);
+            System.out.println(VIEW_ALL_ENROLLMENTS);
+            System.out.println(SEARCH_ENROLLMENT_BY_ID);
+            System.out.println(REMOVE_ENROLLMENT_BY_ID);
+            System.out.println(LIST_ENROLLMENTS_BY_STUDENT_ID);
+            System.out.println(CANCEL_ENROLLMENT_BY_ID);
+            System.out.println(COMPLETE_ENROLLMENT_BY_ID);
+            System.out.println("8. " + GO_BACK_TO_MAIN_MENU);
+            System.out.print(ENTER_CHOICE + " (1-8): ");
 
             subChoice = getUserChoice(scanner);
             System.out.println();
@@ -514,10 +517,10 @@ public class Main {
                     }
                     break;
                 case 8:
-                    System.out.println("Returning to Main Menu...");
+                    System.out.println(RETURNING_MAIN_MENU);
                     break;
                 default:
-                    System.out.println("Error: Invalid sub-entry. Enter a number between 1 and 8.");
+                    System.out.println(INVALID_ENTRY + "1 and 8.");
                     break;
             }
         } while (subChoice != 8);
@@ -525,9 +528,9 @@ public class Main {
 
     private static void createEnrollment(Scanner scanner) {
         try {
-            System.out.println("--------------------- ENTER ENROLLMENT DETAILS ----------------------");
-            System.out.println("(Type 'cancel' to return to menu, or 'exit' to quit the app entirely)");
-            System.out.println("---------------------------------------------------------------------");
+            System.out.println(DASHES + ENTER_ENROLL_DETAILS + DASHES);
+            System.out.println(SUB_MENU_CANCEL_EXIT_OPTION);
+            System.out.println(DASHES+DASHES+DASHES);
 
             int studentId = -1;
             while (studentId == -1) {
@@ -535,7 +538,7 @@ public class Main {
                 studentId = Integer.parseInt(readSafeInput(scanner));
                 Student student = studentService.searchStudentById(studentId);
                 if (student == null) {
-                    System.out.println("============================ Student with id " + studentId + " not found. Please enter valid student id ============================");
+                    System.out.println(EQUALS + " Student with id " + studentId + " not found. Please enter valid student id " + EQUALS);
                     studentId = -1;
                 }
             }
@@ -546,7 +549,7 @@ public class Main {
                 courseId = Integer.parseInt(readSafeInput(scanner));
                 Course course = courseService.searchCourseById(courseId);
                 if (course == null) {
-                    System.out.println("============================ Course with id " + courseId + " not found. Please enter valid course id ============================");
+                    System.out.println(EQUALS + " Course with id " + courseId + " not found. Please enter valid course id " + EQUALS);
                     courseId = -1;
                 }
             }
@@ -565,13 +568,13 @@ public class Main {
                     validDate = LocalDate.parse(userInput, formatter);
                 } catch (DateTimeParseException e) {
                     // Handle invalid formats or wrong dates (e.g., 30-02-2026)
-                    System.out.println("============================ Error: Invalid date or incorrect format. Please try again in this format: dd-MM-yyyy, example: 28-12-2026 ============================");
+                    System.out.println(EQUALS + " Error: Invalid date or incorrect format. Please try again in this format: dd-MM-yyyy, example: 28-12-2026 " + EQUALS);
                 }
             }
 
             enrollmentService.addEnrollment(studentId, courseId, validDate);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         }
     }
 
@@ -587,10 +590,17 @@ public class Main {
         try {
             System.out.println("Enter enrollment id to search for: ");
             int enrollmentId = Integer.parseInt(readSafeInput(scanner));
-            enrollmentService.searchEnrollmentById(enrollmentId);
+            Enrollment enrollmentSearched = enrollmentService.searchEnrollmentById(enrollmentId);
+
+            if (enrollmentSearched == null) {
+                throw new EntityNotFoundException(EQUALS + " Enrollment with id " + enrollmentId + " not found " + EQUALS);
+            } else {
+                System.out.println(EQUALS + " Details of Enrollment with id: " + enrollmentId + " " + EQUALS);
+                System.out.println(enrollmentSearched);
+            }
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
-        } catch (EmptyDataException e) {
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
+        } catch (EntityNotFoundException e) {
             System.out.println(e);
         }
     }
@@ -601,7 +611,7 @@ public class Main {
             int enrollmentId = Integer.parseInt(readSafeInput(scanner));
             enrollmentService.removeEnrollment(enrollmentId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -613,7 +623,7 @@ public class Main {
             int studentId = Integer.parseInt(readSafeInput(scanner));
             enrollmentService.listEnrollmentByStudent(studentId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -625,7 +635,7 @@ public class Main {
             int enrollmentId = Integer.parseInt(readSafeInput(scanner));
             enrollmentService.cancelEnrollment(enrollmentId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }
@@ -637,7 +647,7 @@ public class Main {
             int enrollmentId = Integer.parseInt(readSafeInput(scanner));
             enrollmentService.completeEnrollment(enrollmentId);
         } catch (NumberFormatException e) {
-            System.out.println("============================ Invalid number entered: " + e + " ============================");
+            System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
         } catch (EmptyDataException e) {
             System.out.println(e);
         }

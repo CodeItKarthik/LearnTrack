@@ -1,13 +1,11 @@
 package com.airtribe.learntrack.utils;
 
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.airtribe.learntrack.constants.AppConstants.EMAIL_PATTERN;
+import static com.airtribe.learntrack.constants.AppConstants.NAME_PATTERN;
 
 public class InputValidator {
-
-    private static final Pattern NAME_PATTERN = Pattern.compile("^\\p{L}+([\\s'-]\\p{L}+)*$");
-    private static final String EMAIL_REGEX = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-    private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
 
     /**
      * Validates provided string is neither null nor blank.

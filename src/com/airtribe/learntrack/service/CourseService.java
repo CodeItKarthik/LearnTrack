@@ -9,6 +9,8 @@ import com.airtribe.learntrack.utils.IdGenerator;
 
 import java.util.List;
 
+import static com.airtribe.learntrack.constants.AppConstants.*;
+
 public class CourseService {
 
     CourseRepository courseRepository = new CourseRepository();
@@ -18,19 +20,19 @@ public class CourseService {
         try {
             for (Course course : courses) {
                 if (courseName.equalsIgnoreCase(course.getCourseName())) {
-                    throw new DuplicateException("============================ There is already a course with the given name: " + courseName + ". Please check and try again ============================");
+                    throw new DuplicateException(EQUALS + " There is already a course with the given name: " + courseName + ". Please check and try again " + EQUALS);
                 }
             }
 
             int id = IdGenerator.getNextCourseId();
             Course course;
             if (description.isBlank()) {
-                course = new Course(id, courseName, durationInWeeks, true);
+                course = new Course(id, courseName, durationInWeeks, BOOL_TRUE);
             } else {
-                course = new Course(id, courseName, description, durationInWeeks, true);
+                course = new Course(id, courseName, description, durationInWeeks, BOOL_TRUE);
             }
             courseRepository.addCourse(course);
-            System.out.println("============================ Course added successfully ============================");
+            System.out.println(EQUALS + " Course added successfully " + EQUALS);
         } catch (DuplicateException e) {
             System.out.println(e);
         }
@@ -50,15 +52,15 @@ public class CourseService {
             try {
                 if (courseToDelete != null) {
                     courseRepository.removeCourse(courseToDelete);
-                    System.out.println("============================ Course with id: " + id + " removed successfully ============================");
+                    System.out.println(EQUALS + " Course with id: " + id + " removed successfully " + EQUALS);
                 } else {
-                    throw new EntityNotFoundException("============================ Course with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Course with id " + id + " not found " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no courses available ============================");
+            throw new EmptyDataException(EQUALS + " There are no courses available " + EQUALS);
         }
     }
 
@@ -77,24 +79,24 @@ public class CourseService {
             try {
                 if (courseToDelete != null) {
                     courseRepository.removeCourse(courseToDelete);
-                    System.out.println("============================ Course with name: " + courseName + " removed successfully ============================");
+                    System.out.println(EQUALS + " Course with name: " + courseName + " removed successfully " + EQUALS);
                 } else {
-                    throw new EntityNotFoundException("============================ Course with name " + courseName + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Course with name " + courseName + " not found " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no courses available ============================");
+            throw new EmptyDataException(EQUALS + " There are no courses available " + EQUALS);
         }
     }
 
     public void listCourses() {
         List<Course> courses = courseRepository.listCourses();
         if (courses.isEmpty()) {
-            throw new EmptyDataException("============================ There are no courses to display ============================");
+            throw new EmptyDataException(EQUALS + " There are no courses to display " + EQUALS);
         } else {
-            System.out.println("============================ List of Courses ============================");
+            System.out.println(EQUALS + " List of Courses " + EQUALS);
             courses.forEach(System.out::println);
         }
     }
@@ -119,17 +121,17 @@ public class CourseService {
 
             try {
                 if (courseToDeactivate == null) {
-                    throw new EntityNotFoundException("============================ Course with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Course with id " + id + " not found " + EQUALS);
                 } else {
-                    courseToDeactivate.setActive(false);
+                    courseToDeactivate.setActive(BOOL_FALSE);
                     courseRepository.updateCourse(indexToUpdate, courseToDeactivate);
-                    System.out.println("============================ Course with id: " + id + " deactivated successfully ============================");
+                    System.out.println(EQUALS + " Course with id: " + id + " deactivated successfully " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no courses available ============================");
+            throw new EmptyDataException(EQUALS + " There are no courses available " + EQUALS);
         }
     }
 
@@ -149,17 +151,17 @@ public class CourseService {
 
             try {
                 if (courseToActivate == null) {
-                    throw new EntityNotFoundException("============================ Course with id " + id + " not found ============================");
+                    throw new EntityNotFoundException(EQUALS + " Course with id " + id + " not found " + EQUALS);
                 } else {
-                    courseToActivate.setActive(true);
+                    courseToActivate.setActive(BOOL_TRUE);
                     courseRepository.updateCourse(indexToUpdate, courseToActivate);
-                    System.out.println("============================ Course with id: " + id + " activated successfully ============================");
+                    System.out.println(EQUALS + " Course with id: " + id + " activated successfully " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
                 System.out.println(e);
             }
         } else {
-            throw new EmptyDataException("============================ There are no courses available ============================");
+            throw new EmptyDataException(EQUALS + " There are no courses available " + EQUALS);
         }
     }
 
