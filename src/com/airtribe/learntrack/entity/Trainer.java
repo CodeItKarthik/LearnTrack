@@ -29,7 +29,7 @@ public class Trainer extends Person {
 
     @Override
     public void getDisplayName() {
-        System.out.println("Displaying Trainer name: " + getFirstName() + getLastName());
+        System.out.println("Displaying Trainer name: " + getFirstName() + " " + getLastName());
     }
 
     @Override

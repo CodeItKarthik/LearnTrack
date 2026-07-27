@@ -7,21 +7,21 @@ import java.util.List;
 
 public class EnrollmentRepository {
 
-    ArrayList<Enrollment> enrollments = new ArrayList<>();
+    private static final ArrayList<Enrollment> enrollments = new ArrayList<>();
 
-    public void addEnrollment(Enrollment enrollment) {
+    public static void addEnrollment(Enrollment enrollment) {
         enrollments.add(enrollment);
     }
 
-    public List<Enrollment> listEnrollments() {
+    public static List<Enrollment> listEnrollments() {
         return enrollments;
     }
 
-    public void removeEnrollment(Enrollment enrollment) {
+    public static void removeEnrollment(Enrollment enrollment) {
         enrollments.remove(enrollment);
     }
 
-    public Enrollment searchEnrollmentById(int id) {
+    public static Enrollment searchEnrollmentById(int id) {
         Enrollment enrollmentSearched = null;
         for (Enrollment enrollment : enrollments) {
             if (enrollment.getId() == id) {
@@ -32,7 +32,7 @@ public class EnrollmentRepository {
         return enrollmentSearched;
     }
 
-    public void updateEnrollment(int index, Enrollment enrollment) {
+    public static void updateEnrollment(int index, Enrollment enrollment) {
         enrollments.set(index, enrollment);
     }
 }

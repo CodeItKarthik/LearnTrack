@@ -16,20 +16,18 @@ import static com.airtribe.learntrack.constants.AppConstants.EQUALS;
 
 public class EnrollmentService {
 
-    EnrollmentRepository enrollmentRepository = new EnrollmentRepository();
-
     public void addEnrollment(int studentId, int courseId, LocalDate enrollmentDate) {
-        List<Enrollment> enrollments = enrollmentRepository.listEnrollments();
+        List<Enrollment> enrollments = EnrollmentRepository.listEnrollments();
         try {
             for (Enrollment enrollment : enrollments) {
-                if (studentId == enrollment.getStudentId() && courseId == enrollment.getCourseId()) {
-                    throw new DuplicateException(EQUALS + " This student with id " + studentId + " is already enrolled for this course " + courseId + " " + EQUALS);
+                if (studentId == enrollment.getStudentId() && courseId == enrollment.getCourseId() && STATUSENUM.ACTIVE.equals(enrollment.getStatus())) {
+                    throw new DuplicateException(EQUALS + " Active enrollment found for student with id " + studentId + " for course " + courseId + " " + EQUALS);
                 }
             }
 
             int id = IdGenerator.getNextEnrollmentId();
             Enrollment enrollment = new Enrollment(id, studentId, courseId, enrollmentDate, STATUSENUM.ACTIVE);
-            enrollmentRepository.addEnrollment(enrollment);
+            EnrollmentRepository.addEnrollment(enrollment);
             System.out.println(EQUALS + " Enrollment completed successfully " + EQUALS);
         } catch (DuplicateException e) {
             System.out.println(e);
@@ -37,7 +35,7 @@ public class EnrollmentService {
     }
 
     public void removeEnrollment(int id) {
-        List<Enrollment> enrollments = enrollmentRepository.listEnrollments();
+        List<Enrollment> enrollments = EnrollmentRepository.listEnrollments();
         if (!enrollments.isEmpty()) {
             Enrollment enrollmentToDelete = null;
 
@@ -50,7 +48,7 @@ public class EnrollmentService {
 
             try {
                 if (enrollmentToDelete != null) {
-                    enrollmentRepository.removeEnrollment(enrollmentToDelete);
+                    EnrollmentRepository.removeEnrollment(enrollmentToDelete);
                     System.out.println(EQUALS + " Enrollment with id: " + id + " removed successfully " + EQUALS);
                 } else {
                     throw new EntityNotFoundException(EQUALS + " Enrollment with id " + id + " not found " + EQUALS);
@@ -64,7 +62,7 @@ public class EnrollmentService {
     }
 
     public void listEnrollments() {
-        List<Enrollment> enrollments = enrollmentRepository.listEnrollments();
+        List<Enrollment> enrollments = EnrollmentRepository.listEnrollments();
         if (enrollments.isEmpty()) {
             throw new EmptyDataException(EQUALS + " There are no enrollments to display " + EQUALS);
         } else {
@@ -75,7 +73,7 @@ public class EnrollmentService {
 
     public void listEnrollmentByStudent(int id) {
         List<Enrollment> studentEnrollments = new ArrayList<>();
-        List<Enrollment> enrollments = enrollmentRepository.listEnrollments();
+        List<Enrollment> enrollments = EnrollmentRepository.listEnrollments();
         if (!enrollments.isEmpty()) {
             for (Enrollment enrollment : enrollments) {
                 if (enrollment.getStudentId() == id) {
@@ -99,12 +97,12 @@ public class EnrollmentService {
     }
 
     public Enrollment searchEnrollmentById(int id) {
-        return enrollmentRepository.searchEnrollmentById(id);
+        return EnrollmentRepository.searchEnrollmentById(id);
     }
 
     public void cancelEnrollment(int id) {
         Enrollment enrollmentToCancel = null;
-        List<Enrollment> enrollments = enrollmentRepository.listEnrollments();
+        List<Enrollment> enrollments = EnrollmentRepository.listEnrollments();
         if (!enrollments.isEmpty()) {
             int indexToUpdate = 0;
 
@@ -121,7 +119,7 @@ public class EnrollmentService {
                     throw new EntityNotFoundException(EQUALS + " Enrollment with id " + id + " not found " + EQUALS);
                 } else {
                     enrollmentToCancel.setStatus(STATUSENUM.CANCELLED);
-                    enrollmentRepository.updateEnrollment(indexToUpdate, enrollmentToCancel);
+                    EnrollmentRepository.updateEnrollment(indexToUpdate, enrollmentToCancel);
                     System.out.println(EQUALS + " Enrollment with id " + id + " marked as cancelled " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
@@ -134,7 +132,7 @@ public class EnrollmentService {
 
     public void completeEnrollment(int id) {
         Enrollment enrollmentToComplete = null;
-        List<Enrollment> enrollments = enrollmentRepository.listEnrollments();
+        List<Enrollment> enrollments = EnrollmentRepository.listEnrollments();
         if (!enrollments.isEmpty()) {
             int indexToUpdate = 0;
 
@@ -151,7 +149,7 @@ public class EnrollmentService {
                     throw new EntityNotFoundException(EQUALS + " Enrollment with id " + id + " not found " + EQUALS);
                 } else {
                     enrollmentToComplete.setStatus(STATUSENUM.COMPLETED);
-                    enrollmentRepository.updateEnrollment(indexToUpdate, enrollmentToComplete);
+                    EnrollmentRepository.updateEnrollment(indexToUpdate, enrollmentToComplete);
                     System.out.println(EQUALS + " Enrollment with id " + id + " marked as completed " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {

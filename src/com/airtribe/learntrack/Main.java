@@ -7,6 +7,7 @@ import com.airtribe.learntrack.exceptions.*;
 import com.airtribe.learntrack.service.CourseService;
 import com.airtribe.learntrack.service.EnrollmentService;
 import com.airtribe.learntrack.service.StudentService;
+import com.airtribe.learntrack.service.TrainerService;
 import com.airtribe.learntrack.utils.InputValidator;
 
 import java.io.BufferedReader;
@@ -28,6 +29,7 @@ public class Main {
     private static final StudentService studentService = new StudentService();
     private static final CourseService courseService = new CourseService();
     private static final EnrollmentService enrollmentService = new EnrollmentService();
+    private static final TrainerService trainerService = new TrainerService();
 
     public static void main(String[] args) {
         printBanner();
@@ -43,7 +45,7 @@ public class Main {
                 choice = getUserChoice(scanner);
                 // Pass the scanner into the execution router to handle sub-menus
                 executeMainAction(choice, scanner);
-            } while (choice != 4);
+            } while (choice != 5);
         } catch (SystemExitException e) {
             System.out.println(e);
         } finally {
@@ -68,8 +70,9 @@ public class Main {
         System.out.println(STUDENT_MANAGEMENT_MENU);
         System.out.println(COURSE_MANAGEMENT_MENU);
         System.out.println(ENROLLMENT_MANAGEMENT_MENU);
+        System.out.println(ADD_TRAINER);
         System.out.println(EXIT_APPLICATION);
-        System.out.print(ENTER_CHOICE + " (1-4): ");
+        System.out.print(ENTER_CHOICE + " (1-5): ");
     }
 
     private static void executeMainAction(int choice, Scanner scanner) {
@@ -85,6 +88,10 @@ public class Main {
                 handleEnrollmentManagementSubMenu(scanner);
                 break;
             case 4:
+                scanner.nextLine();
+                createTrainerProfile(scanner);
+                break;
+            case 5:
                 System.out.println(THANKYOU_GOODBYE);
                 break;
             default:
@@ -165,6 +172,38 @@ public class Main {
         } while (subChoice != 7);
     }
 
+    private static void createTrainerProfile(Scanner scanner) {
+        System.out.println(DASHES + ENTER_TRAINER_DETAILS + DASHES);
+        System.out.println(SUB_MENU_CANCEL_EXIT_OPTION);
+        System.out.println(DASHES + DASHES + DASHES);
+
+        String firstName = null;
+        do {
+            System.out.print("Enter First Name: ");
+            firstName = readSafeInput(scanner);
+        } while (!InputValidator.isValidFirstName(firstName));
+
+        String lastName = null;
+        do {
+            System.out.print("Enter Last Name: ");
+            lastName = readSafeInput(scanner);
+        } while (!InputValidator.isNotBlank(lastName));
+
+        // 3. Capture Email with a basic validation check
+        String email = null;
+        while (true) {
+            System.out.print("Enter Email Address: ");
+            email = readSafeInput(scanner);
+
+            if (InputValidator.isValidEmail(email)) {
+                break; // Valid layout, exit validation loop
+            }
+            System.out.println(EQUALS + " Invalid email format. Try again (e.g., name@domain.com) " + EQUALS);
+        }
+        trainerService.addTrainer(firstName, lastName, email);
+        System.out.println();
+    }
+
     private static void createStudentProfile(Scanner scanner) {
         System.out.println(DASHES + ENTER_STUDENT_DETAILS + DASHES);
         System.out.println(SUB_MENU_CANCEL_EXIT_OPTION);
@@ -230,7 +269,7 @@ public class Main {
             studentService.removeStudent(studentId);
         } catch (NumberFormatException e) {
             System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
-        } catch (EmptyDataException e) {
+        } catch (EmptyDataException | BadRequestException e) {
             System.out.println(e);
         }
     }
@@ -404,7 +443,7 @@ public class Main {
             courseService.removeCourse(courseId);
         } catch (NumberFormatException e) {
             System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
-        } catch (EmptyDataException e) {
+        } catch (EmptyDataException | BadRequestException e) {
             System.out.println(e);
         }
     }
@@ -416,7 +455,7 @@ public class Main {
             courseService.removeCourse(courseName);
         } catch (NumberFormatException e) {
             System.out.println(EQUALS + INVALID_NUMBER + e + " " + EQUALS);
-        } catch (EmptyDataException e) {
+        } catch (EmptyDataException | BadRequestException e) {
             System.out.println(e);
         }
     }

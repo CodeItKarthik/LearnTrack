@@ -7,21 +7,21 @@ import java.util.List;
 
 public class StudentRepository {
 
-    ArrayList<Student> students = new ArrayList<>();
+    private static final ArrayList<Student> students = new ArrayList<>();
 
-    public void addStudent(Student student) {
+    public static void addStudent(Student student) {
         students.add(student);
     }
 
-    public List<Student> listStudents() {
+    public static List<Student> listStudents() {
         return students;
     }
 
-    public void removeStudent(Student student) {
+    public static void removeStudent(Student student) {
         students.remove(student);
     }
 
-    public Student searchStudentById(int id) {
+    public static Student searchStudentById(int id) {
         Student studentSearched = null;
         for (Student student : students) {
             if (student.getId() == id) {
@@ -33,7 +33,7 @@ public class StudentRepository {
         return studentSearched;
     }
 
-    public void updateStudent(int index, Student student) {
+    public static void updateStudent(int index, Student student) {
         students.set(index, student);
     }
 

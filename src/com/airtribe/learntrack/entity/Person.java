@@ -47,7 +47,7 @@ public class Person {
     }
 
     public void getDisplayName() {
-        System.out.println("Displaying Person name: " + getFirstName() + getLastName());
+        System.out.println("Displaying Person name: " + getFirstName() + " " + getLastName());
     }
 
     @Override

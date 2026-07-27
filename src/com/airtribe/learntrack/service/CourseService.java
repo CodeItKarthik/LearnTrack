@@ -1,10 +1,13 @@
 package com.airtribe.learntrack.service;
 
 import com.airtribe.learntrack.entity.Course;
+import com.airtribe.learntrack.entity.Enrollment;
+import com.airtribe.learntrack.exceptions.BadRequestException;
 import com.airtribe.learntrack.exceptions.DuplicateException;
 import com.airtribe.learntrack.exceptions.EmptyDataException;
 import com.airtribe.learntrack.exceptions.EntityNotFoundException;
 import com.airtribe.learntrack.repository.CourseRepository;
+import com.airtribe.learntrack.repository.EnrollmentRepository;
 import com.airtribe.learntrack.utils.IdGenerator;
 
 import java.util.List;
@@ -13,10 +16,8 @@ import static com.airtribe.learntrack.constants.AppConstants.*;
 
 public class CourseService {
 
-    CourseRepository courseRepository = new CourseRepository();
-
     public void addCourse(String courseName, String description, int durationInWeeks) {
-        List<Course> courses = courseRepository.listCourses();
+        List<Course> courses = CourseRepository.listCourses();
         try {
             for (Course course : courses) {
                 if (courseName.equalsIgnoreCase(course.getCourseName())) {
@@ -31,7 +32,7 @@ public class CourseService {
             } else {
                 course = new Course(id, courseName, description, durationInWeeks, BOOL_TRUE);
             }
-            courseRepository.addCourse(course);
+            CourseRepository.addCourse(course);
             System.out.println(EQUALS + " Course added successfully " + EQUALS);
         } catch (DuplicateException e) {
             System.out.println(e);
@@ -39,8 +40,16 @@ public class CourseService {
     }
 
     public void removeCourse(int id) {
-        List<Course> courses = courseRepository.listCourses();
+        List<Course> courses = CourseRepository.listCourses();
+        List<Enrollment> enrollments = EnrollmentRepository.listEnrollments();
         if (!courses.isEmpty()) {
+            if (!enrollments.isEmpty()) {
+                for (Enrollment enrollment : enrollments) {
+                    if (enrollment.getStudentId() == id) {
+                        throw new BadRequestException(EQUALS + " This course is currently subscribed by one or more Students. Can't execute remove operation! " + EQUALS);
+                    }
+                }
+            }
             Course courseToDelete = null;
             for (Course course : courses) {
                 if (course.getId() == id) {
@@ -51,7 +60,7 @@ public class CourseService {
 
             try {
                 if (courseToDelete != null) {
-                    courseRepository.removeCourse(courseToDelete);
+                    CourseRepository.removeCourse(courseToDelete);
                     System.out.println(EQUALS + " Course with id: " + id + " removed successfully " + EQUALS);
                 } else {
                     throw new EntityNotFoundException(EQUALS + " Course with id " + id + " not found " + EQUALS);
@@ -65,10 +74,18 @@ public class CourseService {
     }
 
     public void removeCourse(String courseName) {
-        List<Course> courses = courseRepository.listCourses();
+        List<Course> courses = CourseRepository.listCourses();
+        List<Enrollment> enrollments = EnrollmentRepository.listEnrollments();
         if (!courses.isEmpty()) {
+            if (!enrollments.isEmpty()) {
+                for (Enrollment enrollment : enrollments) {
+                    Course course = searchCourseById(enrollment.getCourseId());
+                    if (courseName.equalsIgnoreCase(course.getCourseName())) {
+                        throw new BadRequestException(EQUALS + " This course is currently subscribed by one or more Students. Can't execute remove operation! " + EQUALS);
+                    }
+                }
+            }
             Course courseToDelete = null;
-
             for (Course course : courses) {
                 if (courseName.equalsIgnoreCase(course.getCourseName())) {
                     courseToDelete = course;
@@ -78,7 +95,7 @@ public class CourseService {
 
             try {
                 if (courseToDelete != null) {
-                    courseRepository.removeCourse(courseToDelete);
+                    CourseRepository.removeCourse(courseToDelete);
                     System.out.println(EQUALS + " Course with name: " + courseName + " removed successfully " + EQUALS);
                 } else {
                     throw new EntityNotFoundException(EQUALS + " Course with name " + courseName + " not found " + EQUALS);
@@ -92,7 +109,7 @@ public class CourseService {
     }
 
     public void listCourses() {
-        List<Course> courses = courseRepository.listCourses();
+        List<Course> courses = CourseRepository.listCourses();
         if (courses.isEmpty()) {
             throw new EmptyDataException(EQUALS + " There are no courses to display " + EQUALS);
         } else {
@@ -102,11 +119,11 @@ public class CourseService {
     }
 
     public Course searchCourseById(int id) {
-        return courseRepository.searchCourseById(id);
+        return CourseRepository.searchCourseById(id);
     }
 
     public void deactivateCourse(int id) {
-        List<Course> courses = courseRepository.listCourses();
+        List<Course> courses = CourseRepository.listCourses();
         if (!courses.isEmpty()) {
             Course courseToDeactivate = null;
             int indexToUpdate = 0;
@@ -124,7 +141,7 @@ public class CourseService {
                     throw new EntityNotFoundException(EQUALS + " Course with id " + id + " not found " + EQUALS);
                 } else {
                     courseToDeactivate.setActive(BOOL_FALSE);
-                    courseRepository.updateCourse(indexToUpdate, courseToDeactivate);
+                    CourseRepository.updateCourse(indexToUpdate, courseToDeactivate);
                     System.out.println(EQUALS + " Course with id: " + id + " deactivated successfully " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {
@@ -136,7 +153,7 @@ public class CourseService {
     }
 
     public void activateCourse(int id) {
-        List<Course> courses = courseRepository.listCourses();
+        List<Course> courses = CourseRepository.listCourses();
         if (!courses.isEmpty()) {
             Course courseToActivate = null;
             int indexToUpdate = 0;
@@ -154,7 +171,7 @@ public class CourseService {
                     throw new EntityNotFoundException(EQUALS + " Course with id " + id + " not found " + EQUALS);
                 } else {
                     courseToActivate.setActive(BOOL_TRUE);
-                    courseRepository.updateCourse(indexToUpdate, courseToActivate);
+                    CourseRepository.updateCourse(indexToUpdate, courseToActivate);
                     System.out.println(EQUALS + " Course with id: " + id + " activated successfully " + EQUALS);
                 }
             } catch (EntityNotFoundException e) {

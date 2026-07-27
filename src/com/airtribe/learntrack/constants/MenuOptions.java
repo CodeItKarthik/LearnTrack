@@ -5,7 +5,8 @@ public class MenuOptions {
     public static final String STUDENT_MANAGEMENT_MENU = "1. Student Management";
     public static final String COURSE_MANAGEMENT_MENU = "2. Course Management";
     public static final String ENROLLMENT_MANAGEMENT_MENU = "3. Enrollment Management";
-    public static final String EXIT_APPLICATION = "4. Exit Application";
+    public static final String ADD_TRAINER = "4. Add Trainer";
+    public static final String EXIT_APPLICATION = "5. Exit Application";
 
     public static final String ADD_NEW_STUDENT = "1. Add new student";
     public static final String VIEW_ALL_STUDENTS = "2. View all students";
@@ -44,5 +45,6 @@ public class MenuOptions {
     public static final String ENTER_COURSE_DETAILS = " ENTER COURSE DETAILS ";
     public static final String ENROLL_MANAG_SUBMENU = " ENROLLMENT MANAGEMENT SUB-MENU ";
     public static final String ENTER_ENROLL_DETAILS = " ENTER ENROLLMENT DETAILS ";
+    public static final String ENTER_TRAINER_DETAILS = " ENTER TRAINER DETAILS ";
 
 }

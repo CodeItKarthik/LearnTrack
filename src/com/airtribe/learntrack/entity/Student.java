@@ -29,7 +29,7 @@ public class Student extends Person {
 
     @Override
     public void getDisplayName() {
-        System.out.println("Displaying Student name: " + getFirstName() + getLastName());
+        System.out.println("Displaying Student name: " + getFirstName() + " " + getLastName());
     }
 
     @Override
