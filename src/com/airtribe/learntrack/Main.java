@@ -35,6 +35,7 @@ public class Main {
         printBanner();
         System.out.println();
         System.out.println("Application started successfully!");
+        System.out.println();
 
         Scanner scanner = new Scanner(System.in);
         int choice = 0;
@@ -708,7 +709,7 @@ public class Main {
 
     private static void printBanner() {
         // Reads the file from the classpath
-        try (InputStream is = Main.class.getResourceAsStream("/banner.txt")) {
+        try (InputStream is = Main.class.getResourceAsStream("/com/airtribe/learntrack/resources/banner.txt")) {
             if (is == null) {
                 System.out.println("Banner file not found.");
                 return;
