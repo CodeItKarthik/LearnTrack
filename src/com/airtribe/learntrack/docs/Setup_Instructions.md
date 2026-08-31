@@ -1,5 +1,7 @@
 ## JDK Version Used: 21
 
+![img_2.png](img_2.png)
+
 ## Screenshots of HelloWorld program:
 
 ---
